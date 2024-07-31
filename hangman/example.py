@@ -1,0 +1,47 @@
+import random
+from words import words
+import string
+
+def getValidWord(words):
+    word = random.choice(words)
+    while '-' in word or ' ' in word:
+        word = random.choice(words)
+    return word.upper()
+
+def hangman():
+    word = getValidWord(words)
+    wordLetters = set(word) 
+    alphabet = set(string.ascii_uppercase)
+
+    usedLetters = set()
+
+    lives = 6
+
+    while len(wordLetters) > 0 and lives > 0:
+        print("You have ", lives, "lives left. You have used these letters: ", " ".join(usedLetters))
+        wordList = [letter if letter in usedLetters else "-" for letter in word]
+        print("Current word: ", " ".join(wordList))
+
+        userLetter = input("guess a letter: ").upper()
+        if userLetter in alphabet - usedLetters:
+            usedLetters.add(userLetter)
+            if userLetter in wordLetters:
+                wordLetters.remove(userLetter)
+            else:
+                lives -= 1
+                print("Letter is not in word")
+        elif userLetter in usedLetters:
+            print("You have already used that character. Please guess again")
+        else:
+            print("invalid character. Please try again")
+
+
+    if lives == 0:
+        print("You lost word was ", word)
+    else:
+        print("You guessed the word ", word, "!!")
+
+
+    
+
+hangman()
